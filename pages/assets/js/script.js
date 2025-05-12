@@ -1,32 +1,64 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu toggle
+    // Mobile menu elements
     const mobileMenu = document.querySelector('.mobile-menu');
     const navLinks = document.querySelector('.nav-links');
     
-    mobileMenu.addEventListener('click', function() {
-        navLinks.classList.toggle('active');
-    });
-
-    // Close mobile menu when a link is clicked
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                navLinks.classList.remove('active');
+    // Initialize mobile menu state
+    function initMobileMenu() {
+        if (window.innerWidth <= 768) {
+            navLinks.style.display = 'none';
+            navLinks.classList.remove('active');
+        } else {
+            navLinks.style.display = 'flex';
+        }
+    }
+    
+    // Toggle mobile menu
+    function toggleMobileMenu() {
+        if (window.innerWidth <= 768) {
+            const isActive = navLinks.classList.contains('active');
+            navLinks.style.display = isActive ? 'none' : 'flex';
+            navLinks.classList.toggle('active');
+        }
+    }
+    
+    // Event listeners
+    if (mobileMenu && navLinks) {
+        // Initial setup
+        initMobileMenu();
+        
+        // Menu toggle
+        mobileMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMobileMenu();
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && 
+                navLinks.classList.contains('active') && 
+                !e.target.closest('.nav-links') && 
+                !e.target.closest('.mobile-menu')) {
+                toggleMobileMenu();
             }
         });
-    });
-
-    // Responsive behavior for nav links
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            navLinks.classList.remove('active');
-            navLinks.style.display = 'flex';
-        } else {
-            navLinks.style.display = 'none';
-        }
-    });
-
-    // Smooth scrolling for anchor links
+        
+        // Close menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+        
+        // Responsive behavior
+        window.addEventListener('resize', function() {
+            initMobileMenu();
+        });
+    }
+    
+    // Smooth scrolling (unchanged)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
@@ -43,16 +75,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    // Practice Now button functionality
+    
+    // Practice Now button (unchanged)
     const practiceBtn = document.getElementById('practiceBtn');
     if (practiceBtn) {
         practiceBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            // Replace with your actual practice page URL
             window.location.href = 'practice.html';
-            // Or show a message if page doesn't exist
-            // alert('Practice feature coming soon!');
         });
     }
 });
