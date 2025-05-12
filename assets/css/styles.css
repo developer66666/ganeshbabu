@@ -329,56 +329,6 @@ footer {
     font-size: 14px;
 }
 
-/* Mobile View Adjustments */
-@media (max-width: 768px) {
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 20px;
-    }
-
-    .logo {
-        position: static;
-        transform: none;
-        margin: 0 auto;
-        order: 2; /* Center position in flex flow */
-        text-align: center;
-        flex: 1;
-    }
-
-    .mobile-menu {
-        display: block;
-        order: 1; /* Forces to left side */
-        z-index: 102;
-        margin-right: auto; /* Pushes logo to center */
-    }
-
-    .nav-links {
-        position: fixed;
-        top: 70px;
-        left: -100%;
-        width: 70%;
-        max-width: 300px;
-        height: calc(100vh - 70px);
-        background-color: white;
-        flex-direction: column;
-        padding: 20px;
-        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
-        transition: left 0.3s ease;
-    }
-
-    .nav-links.active {
-        left: 0;
-    }
-
-    .nav-links li {
-        margin: 10px 0;
-        padding: 10px 0;
-        border-bottom: 1px solid #eee;
-    }
-}
-
 
 
     .hero h1 {
@@ -399,4 +349,70 @@ footer {
         max-width: 300px;
         margin-bottom: 10px;
     }
+
+
+
+
+/* Mobile Menu Fixes */
+@media (max-width: 768px) {
+    .mobile-menu {
+        display: block;
+        order: 1;
+        z-index: 1002; /* Higher than everything */
+        position: relative; /* Needed for z-index */
+    }
+
+    .logo {
+        order: 2;
+        flex: 1;
+        text-align: center;
+        z-index: 1001;
+        position: relative;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        height: 100vh;
+        background: white;
+        z-index: 1000;
+        padding-top: 80px; /* Space for header */
+        transition: left 0.3s ease;
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    /* Overlay when menu is open */
+ .nav-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 998;
 }
+
+.nav-overlay.active {
+    display: block;
+}
+
+/* Prevent scrolling when menu is open */
+.no-scroll {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+}
+
+
+
+
+
