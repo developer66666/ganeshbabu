@@ -329,26 +329,31 @@ footer {
     font-size: 14px;
 }
 
-/* Mobile Menu Styles */
+/* Mobile View Adjustments */
 @media (max-width: 768px) {
     nav {
-        justify-content: flex-start;
-        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
     }
-    
+
     .logo {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: max-content;
+        position: static;
+        transform: none;
+        margin: 0 auto;
+        order: 2; /* Center position in flex flow */
+        text-align: center;
+        flex: 1;
     }
-    
+
     .mobile-menu {
         display: block;
-        order: -1;
+        order: 1; /* Forces to left side */
         z-index: 102;
+        margin-right: auto; /* Pushes logo to center */
     }
-    
+
     .nav-links {
         position: fixed;
         top: 70px;
@@ -362,17 +367,20 @@ footer {
         box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
         transition: left 0.3s ease;
     }
-    
+
     .nav-links.active {
         left: 0;
     }
-    
+
     .nav-links li {
         margin: 10px 0;
         padding: 10px 0;
         border-bottom: 1px solid #eee;
     }
 }
+
+
+
     .hero h1 {
         font-size: 36px;
     }
