@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GANESH</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">GANESH<span> BABU</span></div>
+                <ul class="nav-links">
+                    <li><a href="./home.html">Home</a></li>
+                    <li><a href="#PL/SQL">PL/SQL</a></li>
+                    <!-- <li><a href="#" class="btn btn-accent">Get Started</a></li> -->
+                </ul>
+                <div class="mobile-menu">☰</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="SQL" id="SQL">
+            <div class="container">
+                <div class="topic-card">
+                    <div class="topic-content">
+
+
+<H2>PERFORMANCE TUNING</H2>
+
+<p>Performance Tuning to Reduce runtime of a SQL query or PL/SQL Block.</p>
+
+<h3>Scenario</h3>
+<pre><code> A query usually runs for 4 mins, but today it ran for 45 mins?</code></pre>
+
+<h3>Initial Investigation</h3>
+<p>First, I will do the initial investigation:</p>
+
+<h3>1. Verify Execution Time</h3>
+<p>I will verify the execution time yesterday and today to confirm the performance degradation.</p>
+<pre><code>SELECT 
+    sql_id, 
+    elapsed_time/1000000 AS elapsed_seconds, 
+    executions, 
+    buffer_gets, 
+    disk_reads, 
+    last_active_time 
+FROM v$sql 
+WHERE sql_text LIKE '%your_query_identifier%' 
+ORDER BY last_active_time DESC;</code></pre>
+
+<h3>2. Check Data Volume Increase</h3>
+<p>I will check if the data volume has increased significantly since yesterday.</p>
+
+<h3>3. Check for Large Batch Jobs</h3>
+<p>I will check if any large batch jobs were loaded overnight:</p>
+<pre><code>SELECT 
+    job_name,
+    last_start_date,
+    last_run_duration
+FROM dba_scheduler_jobs
+WHERE owner = 'YOUR_SCHEMA';</code></pre>
+
+<pre><code>SELECT job, last_date, last_sec FROM dba_jobs;</code></pre>
+
+<h3>4. Analyze Execution Plan</h3>
+<p>I will analyze the execution plan or use autotrace to understand the type of Scan and Join used by the optimizer:</p>
+<pre><code>EXPLAIN PLAN FOR &lt;your_query&gt;;
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);</code></pre>
+
+<p>Join Methods:</p>
+<pre><code>1. Nested Loop Join
+2. Hash Join
+3. Sort Join</code></pre>
+
+<h3>5. AWR Report Analysis</h3>
+<p>I will get the AWR report from the DBA team and compare yesterday's execution plan with today's:</p>
+<pre><code>SELECT 
+    snap_id,
+    end_interval_time,
+    space_used_total/1024/1024 size_mb
+FROM dba_hist_seg_stat
+WHERE obj# = (SELECT object_id FROM dba_objects WHERE object_name = 'YOUR_TABLE')
+ORDER BY snap_id DESC;</code></pre>
+
+<h3>6. Gather Statistics</h3>
+<p>I will gather statistics to verify if the table statistics are recent or outdated:</p>
+<pre><code>EXEC DBMS_STATS.GATHER_TABLE_STATS('SCHEMA', 'TABLE');</code></pre>
+
+<h3>7. Index Analysis</h3>
+<p>To check whether indexes are used and valid:</p>
+<pre><code>SELECT index_name, status FROM user_indexes WHERE status != 'VALID';</code></pre>
+
+<h3>8. Using Hints to Stabilize Plan</h3>
+<p>We can use hints to stabilize the plan:</p>
+<pre><code>SELECT /*+ NOINDEX (employees,EMP_EMP_ID_PK) */ first_name, salary FROM employees;</code></pre>
+
+<h3>9. Join Table Order and Subqueries</h3>
+<p>I will check the joining table order. Usually, the smallest table should be on the left side. If there is a correlated subquery, we can use Joins for better performance.</p>
+
+<h3>10. Table Partitioning</h3>
+<p>If the table size is more than 2GB, we can partition the table:</p>
+<pre><code>SELECT * FROM user_tab_partitions;</code></pre>
+
+<h3>11. Check Locks and Blocking Sessions</h3>
+<p>I will check for locks and blocking sessions:</p>
+<pre><code>SELECT * FROM v$session WHERE blocking_session IS NOT NULL;</code></pre>
+
+<pre><code>SELECT * FROM v$session_wait WHERE sid IN (SELECT sid FROM v$session WHERE status = 'ACTIVE');</code></pre>
+
+<h3>PL/SQL Block Tuning</h3>
+<p>If the issue is with a PL/SQL Block:</p>
+
+<h3>1. Bulk Collect and FORALL</h3>
+<p>If we are fetching a large volume of data in a cursor loop, we can use Bulk Collect and FORALL to reduce context switching between PL/SQL and SQL.</p>
+
+<h3>2. Using DBMS_PROFILER</h3>
+<p>We can use DBMS_PROFILER to get information about the PL/SQL code execution:</p>
+<pre><code>START Profiler ( execute dbms_profiler.start_profiler())
+
+-- PL/SQL Block
+
+STOP Profiler ( execute dbms_profiler.stop_profiler())</code></pre>
+
+<h3>Final Step</h3>
+<p>After making optimizations, always test the query again. Use SET STATISTICS to measure execution time or check v$sql for performance stats on the query.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div> <!-- .topic-content -->
+                </div> <!-- .topic-card -->
+            </div> <!-- .container -->
+        </section>
+    </main>
+
+
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SQLMaster</h3>
+                    <p>Your complete resource for SQL and PL/SQL interview preparation.</p>
+                    <div class="social-links">
+                        <a href="#">📱</a>
+                        <a href="#">📘</a>
+                        <a href="#">🐦</a>
+                        <a href="#">🔗</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>SQL</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">SQL Fundamentals</a></li>
+                        <li><a href="#">Advanced Queries</a></li>
+                        <li><a href="#">PL/SQL Programming</a></li>
+                        <li><a href="#">Performance Tuning</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Cheat Sheets</a></li>
+                        <li><a href="#">Interview Tips</a></li>
+                        <li><a href="#">Practice Tests</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; GANESH</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ganesh</title>
+    <link rel="stylesheet" href="./assets/css/login_style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <div class="Form login-form">
+            <h2>Login</h2>
+            <form action="#" id="loginForm">
+                <div class="input-box">
+                    <i class='bx bxs-user'></i>
+                    <input type="text" id="username" placeholder="Enter Your Username*">
+                </div>
+                <div class="input-box">
+                    <i class='bx bxs-lock'></i>
+                    <input type="password" id="password" placeholder="Enter Your Password*">
+                </div>
+                <div class="forgot-section">
+                    <span><input type="checkbox" id="rememberMe"> Remember</span>
+                    <span><input type="checkbox" id="showPassword"> Show Password</span>
+                </div>
+                <button class="btn" type="submit">Login</button>
+            </form>
+            <p>Or Login using</p>
+            <div class="social-media">
+                <i class='bx bxl-facebook'></i>
+                <i class='bx bxl-google'></i>
+                <i class='bx bxl-twitter'></i>
+            </div>
+        </div>
+    </div>
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('password');
+        const showPasswordCheckbox = document.getElementById('showPassword');
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const defaultUsername = 'Ganesh';
+            const defaultPassword = 'Vasudeva$555';
+            const enteredUsername = document.getElementById('username').value;
+            const enteredPassword = passwordInput.value;
+
+            if (enteredUsername === defaultUsername && enteredPassword === defaultPassword) {
+                window.location.href = './pages/home.html';
+            } else {
+                alert('Invalid username or password.');
+            }
+        });
+
+        showPasswordCheckbox.addEventListener('change', () => {
+            passwordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
+        });
+    </script>
+</body>
+</html>
